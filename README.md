@@ -194,4 +194,8 @@ python run_experiments.py --H 1000 --W 1000 --days 365 --seed 42 --workers 1 2 4
 
 # Generar animación comparativa
 python visualize_side_by_side.py --seq snapshots_seq --par snapshots_par_w4 --out animations/side_by_side_w4.gif
+---
 
+# Animacion Final Generada Basado En Pruebas
+![side_by_side_w4](https://github.com/user-attachments/assets/4364e371-43ad-4f99-85a5-453a3c4827ba)
+---
