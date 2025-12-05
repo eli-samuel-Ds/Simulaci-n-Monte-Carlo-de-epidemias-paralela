@@ -199,7 +199,7 @@ python visualize_side_by_side.py --seq snapshots_seq --par snapshots_par_w4 --ou
 
 # Animación Final Generada Basado En Pruebas
 
-![side_by_side_w4](animations/side_by_side_w4.gif)
-
+VideoDelResultado/side_by_side_w4.gif
 ---
+
 
