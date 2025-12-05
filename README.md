@@ -1,138 +1,49 @@
-# Simulación SIR Paralela y Secuencial en Python
+# Simulación SIR — Secuencial y Paralela (Python)
 
-Este proyecto implementa una simulación epidemiológica tipo SIR sobre una grilla 2D de hasta **1,000 × 1,000 celdas (1 millón de individuos)**.  
-Incluye:
-
-- Versión secuencial.
-- Versión paralela usando multiprocessing.
-- Comparación de snapshots entre ambas versiones.
-- Scripts de experimentos automáticos.
-- Generación de animaciones para visualizar la simulación.
-
-Este README explica **exactamente** cómo ejecutar todo desde cero en Windows o Linux.
+**Proyecto**: simulación epidemiológica SIR en una grilla 2D (hasta **1000×1000 = 1,000,000** individuos) con versiones secuencial y paralela, comparaciones y visualizaciones.
 
 ---
 
-## 1. Crear un entorno virtual (Windows y Linux)
+## Descripción
 
-Se recomienda usar un entorno virtual para aislar dependencias.
+Este repositorio contiene una implementación de un modelo SIR sobre una malla 2D con las siguientes capacidades:
 
-### Windows
+* Implementación **secuencial**.
+* Implementación **paralela** usando `multiprocessing` (varios workers).
+* Comparación de *snapshots* entre ambas versiones para verificar equivalencia.
+* Scripts para ejecutar experimentos de forma automática (pequeños y grandes).
+* Scripts para generar animaciones (GIF / MP4) que comparan visualmente las ejecuciones.
+
+El README explica cómo ejecutar todo desde cero en Windows o Linux.
+
+---
+
+## Requisitos
+
+* Python 3.9+ (recomendado 3.10/3.11)
+* `git`
+* Memoria suficiente para simulaciones grandes (1000×1000 puede consumir varios GB de RAM)
+
+Dependencias Python (instaladas desde `requirements.txt`):
 
 ```sh
-python -m venv venv
-venv\Scripts\activate
-Linux / macOS
-sh
-Copiar código
-python3 -m venv venv
-source venv/bin/activate
-Luego instala las dependencias del proyecto:
-
-sh
-Copiar código
 pip install -r requirements.txt
-2. Clonar el repositorio
-sh
-Copiar código
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
-Asegúrate de estar dentro de la carpeta donde están:
+```
 
-main.py
+Si quieres generar MP4 necesitarás `imageio[ffmpeg]` y/o `ffmpeg` instalado en el sistema:
 
-parallel.py
+```sh
+pip install "imageio[ffmpeg]"
+# en Linux (opcional, instalación del binario del sistema):
+# Debian/Ubuntu: sudo apt install ffmpeg
+# macOS (Homebrew): brew install ffmpeg
+```
 
-sequential.py
+---
 
-run_experiments.py
+## Estructura del proyecto
 
-visualize_side_by_side.py
-
-3. Ejecutar el main.py
-Este archivo:
-
-Corre la simulación paralela (demo pequeño).
-
-Corre la simulación secuencial.
-
-Compara snapshots.
-
-Ejecuta simulaciones grandes.
-
-Verifica que todo funcione.
-
-Ejecutar:
-
-sh
-Copiar código
-python main.py
-El proceso generará carpetas como:
-
-snapshots_seq/
-
-snapshots_par_w4/
-
-snapshots_seq_big/
-
-snapshots_par_w8/
-
-4. Ejecutar manualmente los experimentos (terminal externa)
-Abre una terminal nueva (cmd / PowerShell / bash) y ejecuta:
-
-Experimentos pequeños (200×200)
-sh
-Copiar código
-python run_experiments.py --H 200 --W 200 --days 60 --seed 42 --workers 1 2 4 8 --quick
-Experimentos grandes (1000×1000)
-sh
-Copiar código
-python run_experiments.py --H 1000 --W 1000 --days 365 --seed 42 --workers 1 2 4 8
-(Opcional) Ejecutar nuevamente los experimentos pequeños
-sh
-Copiar código
-python run_experiments.py --H 200 --W 200 --days 60 --seed 42 --workers 1 2 4 8 --quick
-Los resultados se guardarán en la carpeta:
-
-Copiar código
-results/
-Con subcarpetas:
-
-swift
-Copiar código
-results/Pequeno/
-results/Grande/
-5. Instalar soporte para generación de videos (FFMPEG)
-Para que la animación MP4 funcione, instala:
-
-sh
-Copiar código
-pip install imageio[ffmpeg]
-Esto agrega a imageio la capacidad de exportar archivos .mp4.
-
-6. Generar una animación comparativa (GIF o MP4)
-Ejecuta:
-
-sh
-Copiar código
-python visualize_side_by_side.py --seq snapshots_seq --par snapshots_par_w4 --out animations/side_by_side_w4.gif
-Este script:
-
-Lee los snapshots de la simulación secuencial y paralela.
-
-Crea un GIF comparativo.
-
-(Si FFMPEG está instalado) genera también un .mp4.
-
-La salida se guardará en:
-
-bash
-Copiar código
-animations/side_by_side_w4.gif
-animations/side_by_side_w4.mp4   (solo si FFMPEG está instalado)
-Estructura del Proyecto
-css
-Copiar código
+```
 mc_sir_project/
 │── main.py
 │── parallel.py
@@ -140,6 +51,147 @@ mc_sir_project/
 │── run_experiments.py
 │── visualize_side_by_side.py
 │── requirements.txt
-│── snapshots_*/ (generado automáticamente)
-│── results/   (generado automáticamente)
-│── animations/ (generado automáticamente)
+│── snapshots_seq/          # generado automáticamente
+│── snapshots_par_w4/      # generado automáticamente (ejemplo)
+│── results/               # generado automáticamente
+│── animations/            # generado automáticamente
+```
+
+---
+
+## 1 — Crear un entorno virtual
+
+### Windows (PowerShell / CMD)
+
+```powershell
+# Crear y activar virtualenv (PowerShell)
+python -m venv venv
+.\venv\Scripts\Activate.ps1    # PowerShell
+# o en CMD:
+# venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+### Linux / macOS
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+---
+
+## 2 — Clonar el repositorio
+
+```sh
+git clone https://github.com/tu_usuario/tu_repositorio.git
+cd tu_repositorio
+```
+
+Asegúrate de que los archivos principales estén en la raíz del proyecto:
+
+* `main.py`
+* `parallel.py`
+* `sequential.py`
+* `run_experiments.py`
+* `visualize_side_by_side.py`
+
+---
+
+## 3 — Ejecutar `main.py` (demo y verificación rápida)
+
+El script `main.py` ejecuta una demo pequeña de la versión paralela y la secuencial, guarda snapshots y realiza comparaciones básicas.
+
+```sh
+python main.py
+```
+
+Al finalizar, es normal encontrar carpetas como:
+
+* `snapshots_seq/`
+* `snapshots_par_w4/`
+* `snapshots_seq_big/`
+* `snapshots_par_w8/`
+
+(si tu `main.py` está configurado para esas salidas).
+
+---
+
+## 4 — Ejecutar experimentos manualmente
+
+Puedes abrir una terminal nueva para lanzar `run_experiments.py` con distintos tamaños y número de workers.
+
+### Experimentos pequeños (ej. 200×200, modo rápido)
+
+```sh
+python run_experiments.py --H 200 --W 200 --days 60 --seed 42 --workers 1 2 4 8 --quick
+```
+
+### Experimentos grandes (ej. 1000×1000)
+
+> **Advertencia**: 1000×1000 puede consumir mucha RAM y CPU. Asegúrate de tener suficiente memoria (~8–16 GB o más según configuración).
+
+```sh
+python run_experiments.py --H 1000 --W 1000 --days 365 --seed 42 --workers 1 2 4 8
+```
+
+Si deseas repetir los experimentos pequeños:
+
+```sh
+python run_experiments.py --H 200 --W 200 --days 60 --seed 42 --workers 1 2 4 8 --quick
+```
+
+Los resultados se guardarán en `results/` con subcarpetas típicas como:
+
+```
+results/Pequeno/
+results/Grande/
+```
+
+(Ajusta los nombres según la implementación de `run_experiments.py` en tu repo.)
+
+---
+
+## 5 — Generar animaciones comparativas (GIF / MP4)
+
+Para crear una animación lado a lado entre la versión secuencial y paralela:
+
+```sh
+python visualize_side_by_side.py --seq snapshots_seq --par snapshots_par_w4 --out animations/side_by_side_w4.gif
+```
+
+El script leerá los snapshots en las carpetas indicadas y generará `animations/side_by_side_w4.gif`.
+Si `ffmpeg` está disponible, también podrá generar `animations/side_by_side_w4.mp4`.
+
+---
+
+## 6 — Notas prácticas y troubleshooting
+
+* **Velocidad / paralelismo**: la mejora con `multiprocessing` depende del tamaño del problema y del coste de sincronización/IO. Para `1000×1000` suele notarse mejora con 4–8 workers en máquinas con varios núcleos.
+* **Memoria**: una grilla 1000×1000 con varios arrays por celda puede usar decenas de MB o varios GB. Si ves `MemoryError`, reduce el tamaño H×W o usa menos workers.
+* **Reproducibilidad**: usa `--seed` para fijar generadores aleatorios y comparar snapshots.
+* **Comparación de snapshots**: si los snapshots no coinciden idénticamente, revisa si hay operaciones no deterministas (p. ej. orden en listas compartidas). La comparación debe tolerar pequeñas diferencias numéricas, o usar un *hash* determinista si el algoritmo lo permite.
+* **FFmpeg**: si la conversión a MP4 falla, verifica que `ffmpeg` esté en el `PATH`.
+
+---
+
+## 7 — Ejemplo de comandos frecuentes (resumen rápido)
+
+```sh
+# Activar entorno (Linux/mac)
+source venv/bin/activate
+
+# Ejecutar demo completo
+python main.py
+
+# Experimentos pequeños (rápidos)
+python run_experiments.py --H 200 --W 200 --days 60 --seed 42 --workers 1 2 4 8 --quick
+
+# Experimentos grandes
+python run_experiments.py --H 1000 --W 1000 --days 365 --seed 42 --workers 1 2 4 8
+
+# Generar animación comparativa
+python visualize_side_by_side.py --seq snapshots_seq --par snapshots_par_w4 --out animations/side_by_side_w4.gif
+
